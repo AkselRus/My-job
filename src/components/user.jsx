@@ -2,26 +2,25 @@ import React,{useState} from "react"
 import api from '../api'
 
 const Users = () => {
+  const userAll = api.users.fetchAll();
+  const [ list, setList ] = useState(userAll);
 
-    const userAll = api.users.fetchAll();
-    const [ list, setList ] = useState(userAll);
+  const handleDelete = (id) => {
+    setList(list.filter(tag => tag._id !== id));
+  }  
 
-    const handleDelete = (id) => {
-      setList(list.filter(tag => tag._id !== id));
-    }  
+  let result = list.map(function(item) {      
+    let classes = `badge p-2 m-2 bg-`;
+    const x = item.qualities.map(i => 
+      <span 
+        key={i._id} 
+        className={classes + i.color}
+      >
+        {i.name}
+      </span>
+  );
 
-    let result = list.map(function(item) {      
-        let classes = `badge p-2 m-2 bg-`;
-        const x = item.qualities.map(i => 
-            <span 
-              key={i._id} 
-              className={classes + i.color}
-            >
-              {i.name}
-            </span>
-        );
-
-        return <tr key={item._id}>
+return <tr key={item._id}>
         <td>{item.name}</td>
         <td>{x}</td>
         <td>{item.profession.name}</td>
@@ -35,17 +34,16 @@ const Users = () => {
           </button></td>
         </tr>
 
-    })
+})
 
-    const renderCountPeople = () => {
-      let count = list.length 
-      count = count > 4 || count < 2 
-      ? count + ' человек тусанет с тобой сегодня'
-      : count + ' человека тусанет с тобой сегодня'    
-      console.log(count)
-      return <h1 className="badge m-2 bg-primary">
-        {count}
-      </h1>
+  const renderCountPeople = () => {
+    let count = list.length 
+    count = count > 4 || count < 2 
+    ? count + ' человек тусанет с тобой сегодня'
+    : count + ' человека тусанет с тобой сегодня'    
+    return <h1 className="badge m-2 bg-primary">
+            {count}
+          </h1>
 
     }
 
