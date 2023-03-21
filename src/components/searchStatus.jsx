@@ -1,7 +1,6 @@
 import React from "react";
 
 const SearchStatus = (value) => {
-  console.log("s", value.length);
   let val = value.length;
   val =
     val > 4 || val < 2

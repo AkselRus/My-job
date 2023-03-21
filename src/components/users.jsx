@@ -21,13 +21,8 @@ const Users = (props) => {
           {props.users.map((comp) => (
             <User
               key={comp._id}
-              name={comp.name}
-              qualities={comp.qualities}
-              profession={comp.profession}
-              meetings={comp.completedMeetings}
-              rate={comp.rate}
-              bookmark={comp.bookmark}
               onDel={() => props.onDelete(comp._id)}
+              {...comp}
             />
           ))}
         </tbody>

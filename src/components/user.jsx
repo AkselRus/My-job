@@ -1,21 +1,16 @@
 import React from "react";
+import BookMark from "./bookmark";
+import Qualitie from "./qualitie";
 
 const User = (user) => {
-  let classes = `badge p-2 m-2 bg-`;
-  const qualitie = user.qualities.map((el) => (
-    <span key={el._id} className={classes + el.color}>
-      {el.name}
-    </span>
-  ));
-
   return (
     <tr key={user.id}>
       <td>{user.name}</td>
-      <td>{qualitie}</td>
+      <td>{<Qualitie qualities={user.qualities} />}</td>
       <td>{user.profession.name}</td>
-      <td>{user.meetings}</td>
+      <td>{user.completedMeetings}</td>
       <td>{user.rate}</td>
-      <td>{user.bookmark}</td>
+      <td>{<BookMark />}</td>
       <td>
         <button className="bg-danger" onClick={() => user.onDel(user.id)}>
           delete
