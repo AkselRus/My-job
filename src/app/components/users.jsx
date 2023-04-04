@@ -11,17 +11,16 @@ const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const pageSize = 4;
-    // const [professionsArray, setprofessionsArray] = useState();
-    // useEffect(() => {
-    // }, []);
-    const [professions, setProfessions] = useState(api.professions.fetchAll());
+    const [professions, setProfessions] = useState();
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
+        api.professions.fetchAll().then((data) => console.log("setProfessions", data));
     }, []);
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
-    const handleprofessionSelect = (items) => {
+    const handleProfessionSelect = (items) => {
+        console.log("handleProfessionSelect", items);
         setSelectedProf(items);
     };
     const handlePageChange = (pageIndex) => {
@@ -29,14 +28,20 @@ const Users = ({ users: allUsers, ...rest }) => {
     };
 
     const filteredUsers = selectedProf
-        ? allUsers.filter((user) => user.profession === selectedProf)
+        ? allUsers.filter((user) => user.profession._id === selectedProf._id)
         : allUsers;
+    console.log("test filter", allUsers.filter((user) => user.profession === selectedProf));
     const count = filteredUsers?.length;
+
     const clearFilter = () => {
         setSelectedProf();
     };
 
     const usersCrop = paginate(filteredUsers, currentPage, pageSize);
+    // console.log("selectedProf", selectedProf);
+    // console.log("count", count);
+    // console.log("test", allUsers);
+    // console.log("filteredUsers", filteredUsers);
     return (
         <div className="d-flex">
             {professions &&
@@ -44,7 +49,7 @@ const Users = ({ users: allUsers, ...rest }) => {
                 <GroupList
                     selectedItem={selectedProf}
                     item={professions}
-                    onItemSelect={handleprofessionSelect}
+                    onItemSelect={handleProfessionSelect}
                 />
                 <button
                     className="btn btn-secondary mt-2"
