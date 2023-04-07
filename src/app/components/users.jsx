@@ -3,15 +3,17 @@ import PropTypes from "prop-types";
 import SearchStatus from "./searchStatus";
 import { paginate } from "../utils/paginate";
 import Pagination from "./pagination";
-import User from "./user";
+import _ from "lodash";
 import GroupList from "./groupList";
 import api from "../api";
+import UserTable from "./userTable";
 
 const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const pageSize = 4;
     const [professions, setProfessions] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const pageSize = 8;
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.professions.fetchAll().then((data) => console.log("setProfessions", data));
@@ -23,6 +25,14 @@ const Users = ({ users: allUsers, ...rest }) => {
         console.log("handleProfessionSelect", items);
         setSelectedProf(items);
     };
+    const handleSort = (item) => {
+        if (sortBy.iter === item) {
+            setSortBy((prevState) =>
+                ({ ...prevState, order: prevState.order === "asc" ? "desc" : "asc" }));
+        } else {
+            setSortBy({ iter: item, order: "asc" });
+        }
+    };
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
@@ -32,20 +42,16 @@ const Users = ({ users: allUsers, ...rest }) => {
         : allUsers;
     console.log("test filter", allUsers.filter((user) => user.profession === selectedProf));
     const count = filteredUsers?.length;
-
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
     const clearFilter = () => {
         setSelectedProf();
     };
-
-    const usersCrop = paginate(filteredUsers, currentPage, pageSize);
-    // console.log("selectedProf", selectedProf);
-    // console.log("count", count);
-    // console.log("test", allUsers);
-    // console.log("filteredUsers", filteredUsers);
+    const usersCrop = paginate(sortedUsers, currentPage, pageSize);
+    console.log("usersCrop", usersCrop);
     return (
-        <div className="d-flex">
+        <div className="d-flex align-self-center">
             {professions &&
-            <div className="d-flex flex-column flex-shrink-0 p-3">
+            <div className="d-flex flex-column flex-shrink-0 p-0">
                 <GroupList
                     selectedItem={selectedProf}
                     item={professions}
@@ -58,27 +64,10 @@ const Users = ({ users: allUsers, ...rest }) => {
             </div>
             }
             {count > 0 && (
-                <div>
+                <div className="w-100 p-0 mh-100">
                     <SearchStatus length={count} />
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Имя</th>
-                                <th scope="col">Качества</th>
-                                <th scope="col">Провфессия</th>
-                                <th scope="col">Встретился, раз</th>
-                                <th scope="col">Оценка</th>
-                                <th scope="col">Избранное</th>
-                                <th />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {usersCrop.map((user) => (
-                                <User {...rest} {...user} key={user._id} />
-                            ))}
-                        </tbody>
-                    </table>
                     <div className="d-flex justify-content-center">
+                        <UserTable users={usersCrop} onSort={handleSort} {...rest}/>
                         <Pagination
                             itemsCount={count}
                             pageSize={pageSize}
