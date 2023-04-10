@@ -86,14 +86,14 @@ const Users = () => {
                 {count > 0 && (
                     <div className="w-100 p-0 mh-100">
                         <SearchStatus length={count} />
+                        <UserTable
+                            users={usersCrop}
+                            onSort={handleSort}
+                            selectedSort={sortBy}
+                            onToggleBookMark={handleToggleBookMark}
+                            onDelete={handleDelete}
+                        />
                         <div className="d-flex justify-content-center">
-                            <UserTable
-                                users={usersCrop}
-                                onSort={handleSort}
-                                selectedSort={sortBy}
-                                onToggleBookMark={handleToggleBookMark}
-                                onDelete={handleDelete}
-                            />
                             <Pagination
                                 itemsCount={count}
                                 pageSize={pageSize}
