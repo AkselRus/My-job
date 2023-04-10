@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
+    console.log("selectedSort", selectedSort);
+    const [fill, setFill] = useState("bi bi-caret-up-fill");
     const handleSort = (item) => {
         if (selectedSort.path === item) {
-            onSort({ ...selectedSort, order: selectedSort.order === "asc" ? "desc" : "asc" });
+            onSort({
+                ...selectedSort,
+                order: selectedSort.order === "asc" ? "desc" : "asc"
+            });
+            if (selectedSort.order === "desc") {
+                setFill("bi bi-caret-up-fill");
+            } else setFill("bi bi-caret-down-fill");
         } else {
             onSort({ path: item, order: "asc" });
         }
@@ -15,11 +23,22 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                 {Object.keys(columns).map((column) => (
                     <th
                         key={column}
-                        onClick={columns[column].path
-                            ? () => handleSort(columns[column].path)
-                            : undefined}
+                        className={
+                            columns[column].path &&
+                            columns[column].path === selectedSort.path
+                                ? fill
+                                : ""
+                        }
+                        onClick={
+                            columns[column].path
+                                ? () => handleSort(columns[column].path)
+                                : undefined
+                        }
                         {...{ role: columns[column].path && "button" }}
-                        scope="col">{columns[column].name}</th>
+                        scope="col"
+                    >
+                        {columns[column].name}
+                    </th>
                 ))}
                 {/* <th onClick={() => handleSort("name")} scope="col">Имя</th>
                 <th scope="col">Качества</th>
@@ -36,6 +55,5 @@ TableHeader.propTypes = {
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
     columns: PropTypes.object.isRequired
-
 };
 export default TableHeader;

@@ -12,12 +12,14 @@ const Users = () => {
     const [currentPage, setCurrentPage] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [professions, setProfessions] = useState();
-    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [sortBy, setSortBy] = useState({
+        iter: "name",
+        order: "asc"
+    });
     const pageSize = 8;
 
     const [users, setUsers] = useState();
     useEffect(() => {
-        api.users.fetchAll().then((data) => console.log("data App", data));
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
     const handleDelete = (userId) => {
@@ -32,12 +34,10 @@ const Users = () => {
                 return user;
             })
         );
-        console.log(id);
     };
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
-        api.professions.fetchAll().then((data) => console.log("setProfessions", data));
     }, []);
     useEffect(() => {
         setCurrentPage(1);
@@ -46,6 +46,7 @@ const Users = () => {
         setSelectedProf(items);
     };
     const handleSort = (item) => {
+        console.log("item", item);
         setSortBy(item);
     };
     const handlePageChange = (pageIndex) => {
@@ -55,27 +56,33 @@ const Users = () => {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
             : users;
-        const count = filteredUsers?.length;
-        const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.path, "name"],
+            [sortBy.order]
+        );
         const clearFilter = () => {
             setSelectedProf();
         };
+        const count = sortedUsers.length;
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
         return (
             <div className="d-flex align-self-center">
-                {professions &&
-            <div className="d-flex flex-column flex-shrink-0 p-0">
-                <GroupList
-                    selectedItem={selectedProf}
-                    item={professions}
-                    onItemSelect={handleProfessionSelect}
-                />
-                <button
-                    className="btn btn-secondary mt-2"
-                    onClick={clearFilter}
-                >Сброс</button>
-            </div>
-                }
+                {professions && (
+                    <div className="d-flex flex-column flex-shrink-0 p-0">
+                        <GroupList
+                            selectedItem={selectedProf}
+                            item={professions}
+                            onItemSelect={handleProfessionSelect}
+                        />
+                        <button
+                            className="btn btn-secondary mt-2"
+                            onClick={clearFilter}
+                        >
+                            Сброс
+                        </button>
+                    </div>
+                )}
                 {count > 0 && (
                     <div className="w-100 p-0 mh-100">
                         <SearchStatus length={count} />
@@ -96,17 +103,13 @@ const Users = () => {
                         </div>
                     </div>
                 )}
-
             </div>
         );
     }
     return "Загрузка...";
 };
 Users.propTypes = {
-    users: PropTypes.oneOfType([
-        PropTypes.array,
-        PropTypes.object
-    ])
+    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default Users;

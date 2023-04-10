@@ -6,30 +6,45 @@ import Table from "./table";
 import BookMark from "./bookmark";
 import QualityList from "./qualityList";
 
-const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete }) => {
+const UserTable = ({
+    users,
+    onSort,
+    selectedSort,
+    onToggleBookMark,
+    onDelete
+}) => {
     const columns = {
         name: { path: "name", name: "Имя" },
-        qualities: { name: "Качества", component: (user) => (<QualityList qualities={user.qualities}/>) },
+        qualities: {
+            name: "Качества",
+            component: (user) => <QualityList qualities={user.qualities} />
+        },
         professions: { path: "profession.name", name: "Профессия" },
-        completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
+        completedMeetings: {
+            path: "completedMeetings",
+            name: "Встретился, раз"
+        },
         rate: { path: "rate", name: "Оценка" },
         bookmark: {
             path: "bookmark",
             name: "Избранное",
-            component: (user) => (<BookMark
-                status={user.bookmark}
-                onClick={() => onToggleBookMark(user._id)}
-            />)
+            component: (user) => (
+                <BookMark
+                    status={user.bookmark}
+                    onClick={() => onToggleBookMark(user._id)}
+                />
+            )
         },
         delete: {
-            component: (user) => (<button
-                onClick={() => onDelete(user._id)}
-                className="btn btn-danger"
-            >
-            delete
-            </button>)
+            component: (user) => (
+                <button
+                    onClick={() => onDelete(user._id)}
+                    className="btn btn-danger"
+                >
+                    delete
+                </button>
+            )
         }
-
     };
     return (
         <Table
@@ -45,10 +60,7 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete }) 
     );
 };
 UserTable.propTypes = {
-    users: PropTypes.oneOfType([
-        PropTypes.array,
-        PropTypes.object
-    ]),
+    users: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
     onToggleBookMark: PropTypes.func.isRequired,
