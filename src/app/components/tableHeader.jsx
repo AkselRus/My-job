@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
-    console.log("selectedSort", selectedSort);
     const [fill, setFill] = useState("bi bi-caret-up-fill");
     const handleSort = (item) => {
         if (selectedSort.path === item) {
