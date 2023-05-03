@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AccountUser from "./accountUser";
-import UsersComponent from "../components/users";
+import UsersComponent from "../components/page/usersList";
 import { useParams, useHistory } from "react-router-dom";
 import api from "../api";
 
@@ -16,16 +16,16 @@ const Users = () => {
     const handleAllUser = () => {
         history.push("/layouts/users");
     };
-    console.log("user", user);
-    console.log("usersId", usersId);
     if (usersId !== user?._id) {
         return <h1>Loaging</h1>;
-    };
+    }
     return (
         <>
-            {user
-                ? (<AccountUser user={user} handle={handleAllUser} />)
-                : (<UsersComponent />)}
+            {user ? (
+                <AccountUser user={user} handle={handleAllUser} />
+            ) : (
+                <UsersComponent />
+            )}
         </>
     );
 };

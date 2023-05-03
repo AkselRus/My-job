@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import SearchStatus from "./searchStatus";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
+import SearchStatus from "../ui/searchStatus";
+import { paginate } from "../../utils/paginate";
+import Pagination from "../common/pagination";
 import _ from "lodash";
-import GroupList from "./groupList";
-import api from "../api";
-import UserTable from "./userTable";
+import GroupList from "../common/groupList";
+import api from "../../api";
+import UserTable from "../ui/userTable";
 
-const Users = () => {
+const UsersList = () => {
     const [currentPage, setCurrentPage] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [professions, setProfessions] = useState();
+    const [input, setInput] = useState();
     const [sortBy, setSortBy] = useState({
         iter: "name",
         order: "asc"
     });
     const pageSize = 8;
-
     const [users, setUsers] = useState();
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -43,25 +44,45 @@ const Users = () => {
         setCurrentPage(1);
     }, [selectedProf]);
     const handleProfessionSelect = (items) => {
+        setInput();
         setSelectedProf(items);
     };
     const handleSort = (item) => {
         console.log("item", item);
         setSortBy(item);
     };
+    const handleInputChange = (event) => {
+        setSelectedProf();
+        setInput(event.target.value);
+    };
+    const searchUser = (input, users) => {
+        if (input) {
+            const isInput = input.toLowerCase();
+            const filterUsers = users.filter((user) =>
+                user.name.toLowerCase().includes(isInput)
+            );
+            if (filterUsers.length === 0) {
+                return users;
+            }
+            return filterUsers;
+        } else return users;
+    };
+    const people = searchUser(input, users);
+    console.log("people", people);
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
-            : users;
+            : people;
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.path, "name"],
             [sortBy.order]
         );
         const clearFilter = () => {
+            setInput("");
             setSelectedProf();
         };
         const count = sortedUsers.length;
@@ -86,6 +107,13 @@ const Users = () => {
                 {count > 0 && (
                     <div className="w-100 p-0 mh-100">
                         <SearchStatus length={count} />
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Search..."
+                        />{" "}
                         <UserTable
                             users={usersCrop}
                             onSort={handleSort}
@@ -108,8 +136,8 @@ const Users = () => {
     }
     return "Загрузка...";
 };
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
-export default Users;
+export default UsersList;

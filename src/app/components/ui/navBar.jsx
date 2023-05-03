@@ -10,7 +10,7 @@ const NavBar = () => {
             <Link className="nav-link" to="../layouts/login">
                 Login
             </Link>
-            <Link className="nav-link" to="../layouts/users">
+            <Link className="nav-link" to="../layouts/usersList">
                 Users
             </Link>
         </nav>
