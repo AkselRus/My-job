@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextFiled from "../common/form/textFiled";
 import { validator } from "../../utils/validator";
+import api from "../../api";
 
-const LoginForm = () => {
-    const [data, setData] = useState({ email: "", password: "" });
+const RegisterForm = () => {
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        professions: ""
+    });
     const [errors, setErrors] = useState({});
+    const [professions, setProfessions] = useState();
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => setProfessions(data));
+    }, []);
     const handleChange = (event) => {
         setData((prevState) => ({
             ...prevState,
@@ -62,6 +71,37 @@ const LoginForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
+            <div className="mb-4">
+                <label htmlFor="validationCustom04" className="form-label">
+                    State
+                </label>
+                <select
+                    className="form-select"
+                    id="validationCustom04"
+                    required
+                >
+                    <option
+                        selected={data.professions === ""}
+                        disabled
+                        value=""
+                    >
+                        Choose...
+                    </option>
+                    {professions &&
+                        professions.map((profession) => (
+                            <option
+                                key={profession._id}
+                                selected={profession._id === data.professions}
+                                value={profession._id}
+                            >
+                                {profession.name}
+                            </option>
+                        ))}
+                </select>
+                <div className="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
@@ -72,4 +112,4 @@ const LoginForm = () => {
         </form>
     );
 };
-export default LoginForm;
+export default RegisterForm;
