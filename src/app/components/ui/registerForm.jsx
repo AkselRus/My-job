@@ -2,22 +2,25 @@ import React, { useState, useEffect } from "react";
 import TextFiled from "../common/form/textFiled";
 import { validator } from "../../utils/validator";
 import api from "../../api";
+import SelectedField from "../common/form/selectedField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
-        professions: ""
+        profession: ""
     });
+    console.log("data", data);
+
     const [errors, setErrors] = useState({});
     const [professions, setProfessions] = useState();
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
-    const handleChange = (event) => {
+    const handleChange = ({ target }) => {
         setData((prevState) => ({
             ...prevState,
-            [event.target.name]: event.target.value
+            [target.name]: target.value
         }));
     };
     const validatorConfig = {
@@ -37,8 +40,12 @@ const RegisterForm = () => {
                 message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
             }
+        },
+        professions: {
+            isRequired: { message: "Обязательно выберите вашу профессию" }
         }
     };
+
     useEffect(() => {
         validate();
     }, [data]);
@@ -52,7 +59,7 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log("data", data);
+        console.log("data", data.professions);
     };
     return (
         <form onSubmit={handleSubmit}>
@@ -71,37 +78,43 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
-            <div className="mb-4">
+            <SelectedField
+                label="Выберите вашу профессию"
+                defaultOption="Choose..."
+                options={professions}
+                name="profession"
+                value={data.professions}
+                onChange={handleChange}
+                error={errors.profession}
+            />
+            {/* <div className="mb-4">
                 <label htmlFor="validationCustom04" className="form-label">
                     State
                 </label>
                 <select
                     className="form-select"
                     id="validationCustom04"
-                    required
+                    name="profession"
+                    value={data.profession}
+                    onChange={handleChange}
                 >
-                    <option
-                        selected={data.professions === ""}
-                        disabled
-                        value=""
-                    >
+                    <option selected disabled value="">
                         Choose...
                     </option>
                     {professions &&
-                        professions.map((profession) => (
+                        Object.keys(professions).map((professionName) => (
                             <option
-                                key={profession._id}
-                                selected={profession._id === data.professions}
-                                value={profession._id}
+                                key={professions[professionName]._id}
+                                value={professions[professionName]._id}
                             >
-                                {profession.name}
+                                {professions[professionName].name}
                             </option>
                         ))}
                 </select>
                 <div className="invalid-feedback">
                     Please select a valid state.
                 </div>
-            </div>
+            </div> */}
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
