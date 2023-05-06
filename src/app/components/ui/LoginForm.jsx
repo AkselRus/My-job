@@ -1,14 +1,20 @@
+/* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
 import TextFiled from "../common/form/textFiled";
+import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
 
 const LoginForm = () => {
-    const [data, setData] = useState({ email: "", password: "" });
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        stayOn: false
+    });
     const [errors, setErrors] = useState({});
-    const handleChange = (event) => {
+    const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
-            [event.target.name]: event.target.value
+            [target.name]: target.value
         }));
     };
     const validatorConfig = {
@@ -62,6 +68,13 @@ const LoginForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
+            <CheckBoxField
+                name={"stayOn"}
+                value={data.stayOn}
+                onChange={handleChange}
+            >
+                Оставаться в системе
+            </CheckBoxField>
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"

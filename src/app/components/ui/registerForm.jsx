@@ -3,12 +3,17 @@ import TextFiled from "../common/form/textFiled";
 import { validator } from "../../utils/validator";
 import api from "../../api";
 import SelectedField from "../common/form/selectedField";
+import RadioField from "../common/form/radioField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
-        profession: ""
+        profession: "",
+        sex: "Male",
+        qualities: [],
+        license: false
     });
     console.log("data", data);
 
@@ -17,7 +22,7 @@ const RegisterForm = () => {
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
     }, []);
-    const handleChange = ({ target }) => {
+    const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -43,6 +48,12 @@ const RegisterForm = () => {
         },
         professions: {
             isRequired: { message: "Обязательно выберите вашу профессию" }
+        },
+        license: {
+            isRequired: {
+                message:
+                    "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
+            }
         }
     };
 
@@ -87,6 +98,25 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.profession}
             />
+            <RadioField
+                options={[
+                    { name: "Male", value: "Male" },
+                    { name: "Female", value: "Female" },
+                    { name: "Other", value: "Other" }
+                ]}
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Выберите ваш пол"
+            />
+            <CheckBoxField
+                name={"license"}
+                value={data.license}
+                onChange={handleChange}
+                error={errors.license}
+            >
+                Подтвердить <a>лицензионное соглашение</a>
+            </CheckBoxField>
             {/* <div className="mb-4">
                 <label htmlFor="validationCustom04" className="form-label">
                     State

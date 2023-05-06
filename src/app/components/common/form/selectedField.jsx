@@ -23,12 +23,6 @@ const SelectedField = ({
                   value: options[optionName]._id
               }))
             : options;
-    console.log("onChange", onChange);
-    console.log("optionArray", optionArray);
-    console.log("value", value);
-    console.log("options", options);
-    console.log("name", name);
-
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">

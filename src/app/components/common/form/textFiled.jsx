@@ -3,11 +3,18 @@ import PropTypes from "prop-types";
 
 const TextFiled = ({ label, type, name, value, onChange, error }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [data, setData] = useState(value ?? "");
     const getInputClasses = () => {
         return "form-control" + (error ? " is-invalid" : "");
     };
     const toggleShowPassword = () => {
         setShowPassword((prev) => !prev);
+    };
+    const handleChange = (event) => {
+        if (onChange) {
+            onChange(event.target.value);
+        }
+        setData(event.target.value);
     };
     return (
         <div className="mb-4">
@@ -16,10 +23,10 @@ const TextFiled = ({ label, type, name, value, onChange, error }) => {
                 <input
                     type={showPassword ? "text" : type}
                     id={name}
-                    value={value}
+                    value={data}
                     name={name}
-                    onChange={onChange}
-                    className={getInputClasses}
+                    onChange={handleChange}
+                    className={getInputClasses()}
                 />
                 {type === "password" && (
                     <button
@@ -27,7 +34,11 @@ const TextFiled = ({ label, type, name, value, onChange, error }) => {
                         type="button"
                         onClick={toggleShowPassword}
                     >
-                        <i className={"bi bi-eye" + (showPassword ? "-slash" : "")}></i>
+                        <i
+                            className={
+                                "bi bi-eye" + (showPassword ? "-slash" : "")
+                            }
+                        ></i>
                     </button>
                 )}
                 {error && <div className="invalid-feedback">{error}</div>}
