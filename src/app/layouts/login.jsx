@@ -8,7 +8,7 @@ const Login = () => {
     const [formType, setFormType] = useState(
         type === "register" ? type : "login"
     );
-    const toogleFormType = (params) => {
+    const toogleFormType = () => {
         setFormType((prevState) =>
             prevState === "register" ? "login" : "register"
         );

@@ -10,18 +10,22 @@ const SelectedField = ({
     error,
     name
 }) => {
-    // const handleChange = ({ target }) => {
-    //     onChange({ name: target.name, value: target.value });
-    // };
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
     const getInputClasses = () => {
         return "form-select" + (error ? " is-invalid" : "");
     };
+    // const optionArray =
+    //     !Array.isArray(options) && typeof options === "object"
+    //         ? Object.keys(options).map((optionName) => ({
+    //               name: options[optionName].name,
+    //               value: options[optionName]._id
+    //           }))
+    //         : options;
     const optionArray =
         !Array.isArray(options) && typeof options === "object"
-            ? Object.keys(options).map((optionName) => ({
-                  name: options[optionName].name,
-                  value: options[optionName]._id
-              }))
+            ? Object.values(options)
             : options;
     return (
         <div className="mb-4">
@@ -34,7 +38,7 @@ const SelectedField = ({
                 id={name}
                 name={name}
                 value={value}
-                onChange={onChange}
+                onChange={handleChange}
             >
                 <option disabled value="">
                     {defaultOption}

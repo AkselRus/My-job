@@ -5,6 +5,7 @@ import api from "../../api";
 import SelectedField from "../common/form/selectedField";
 import RadioField from "../common/form/radioField";
 import CheckBoxField from "../common/form/checkBoxField";
+import MultiSelectField from "../common/form/multiSelectField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -19,10 +20,14 @@ const RegisterForm = () => {
 
     const [errors, setErrors] = useState({});
     const [professions, setProfessions] = useState();
+    const [qualities, setQualities] = useState();
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
+        api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
+    console.log("qualities", qualities);
     const handleChange = (target) => {
+        console.log("target", target);
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -97,6 +102,13 @@ const RegisterForm = () => {
                 value={data.professions}
                 onChange={handleChange}
                 error={errors.profession}
+            />
+            <MultiSelectField
+                onChange={handleChange}
+                options={qualities}
+                defaultValue={data.qualities}
+                name="qualities"
+                label="Выберите ваши качества"
             />
             <RadioField
                 options={[
