@@ -11,22 +11,23 @@ const SelectedField = ({
     name
 }) => {
     const handleChange = ({ target }) => {
+        console.log("target", target);
         onChange({ name: target.name, value: target.value });
     };
     const getInputClasses = () => {
         return "form-select" + (error ? " is-invalid" : "");
     };
-    // const optionArray =
-    //     !Array.isArray(options) && typeof options === "object"
-    //         ? Object.keys(options).map((optionName) => ({
-    //               name: options[optionName].name,
-    //               value: options[optionName]._id
-    //           }))
-    //         : options;
     const optionArray =
         !Array.isArray(options) && typeof options === "object"
-            ? Object.values(options)
+            ? Object.keys(options).map((optionName) => ({
+                  name: options[optionName].name,
+                  value: options[optionName]._id
+              }))
             : options;
+    // const optionArray =
+    //     !Array.isArray(options) && typeof options === "object"
+    //         ? Object.values(options)
+    //         : options;
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">
@@ -46,7 +47,7 @@ const SelectedField = ({
                 {optionArray &&
                     optionArray.map((option) => (
                         <option key={option.value} value={option.value}>
-                            {option.name}
+                            {option.label}
                         </option>
                     ))}
             </select>
