@@ -19,10 +19,12 @@ const UserPage = ({ userId }) => {
     if (user) {
         return (
             <div>
-                <h1> {user.name}</h1>
+                <h1> {`Имя: ${user.name}`}</h1>
+                <h2>{`Почта: ${user.email}`}</h2>
                 <h2>Профессия: {user.profession.name}</h2>
                 <Qualities qualities={user.qualities} />
                 <p>completedMeetings: {user.completedMeetings}</p>
+                <h2>{`Пол: ${user.sex}`}</h2>
                 <h2>Rate: {user.rate}</h2>
                 <button onClick={handleClick}> Все Пользователи</button>
                 <button onClick={handleClickEdit}>Изменить</button>
