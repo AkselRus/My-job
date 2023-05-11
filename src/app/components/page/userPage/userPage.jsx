@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 const UserPage = ({ userId }) => {
     const history = useHistory();
     const [user, setUser] = useState();
+    console.log("user", user);
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
     }, []);

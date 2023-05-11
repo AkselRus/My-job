@@ -5,20 +5,8 @@ import TextFiled from "../../common/form/textFiled";
 import SelectedField from "../../common/form/selectedField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
-import { update } from "lodash";
 
 const EditUserPage = () => {
-    // const [data, setData] = useState({
-    //     bookmark: false,
-    //     completedMeetings: 247,
-    //     email: "bob007@tw.com",
-    //     name: "Боб Келсо",
-    //     profession: { _id: "67rdca3eeb7f6fgeed471818", name: "Доктор" },
-    //     qualities: [],
-    //     rate: 3.5,
-    //     sex: "male",
-    //     _id: "67rdca3eeb7f6fgeed471817"
-    // });
     const [user, setUser] = useState();
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
@@ -27,28 +15,46 @@ const EditUserPage = () => {
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
         api.professions.fetchAll().then((data) => {
-            const professionsList = Object.keys(data).map((professionName) => ({
-                label: data[professionName].name,
-                value: data[professionName]._id
+            const professionsList = Object.keys(data).map((name) => ({
+                label: data[name].name,
+                value: data[name]._id
             }));
             setProfession(professionsList);
         });
         api.qualities.fetchAll().then((data) => {
-            const qualitiesList = Object.keys(data).map((optionName) => ({
-                value: data[optionName]._id,
-                label: data[optionName].name,
-                color: data[optionName].color
+            const qualitiesList = Object.keys(data).map((option) => ({
+                value: data[option]._id,
+                label: data[option].name,
+                color: data[option].color
             }));
             setQualities(qualitiesList);
         });
     }, []);
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label };
+            }
+        }
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    });
+                }
+            }
+        }
+        return qualitiesArray;
+    };
     console.log("user", user);
     console.log("qualities", qualities);
     console.log("professions", professions);
-    const handleClickPage = () => {
-        update(userId, user);
-        history.push(`/users/${userId}`);
-    };
 
     const handleChange = (event) => {
         console.log("event", event);
@@ -59,6 +65,19 @@ const EditUserPage = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
+        const newData = {
+            ...user,
+            profession: getProfessionById(user.profession),
+            qualities: getQualities(user.qualities)
+        };
+        console.log("reg data", {
+            ...user,
+            profession: getProfessionById(user.profession),
+            qualities: getQualities(user.qualities)
+        });
+        api.users.update(userId, newData);
+        console.log(history);
+        history.push(`/users/${userId}`);
     };
     return user ? (
         <form onSubmit={handleSubmit}>
@@ -103,11 +122,7 @@ const EditUserPage = () => {
                 name="qualities"
                 label="Выберите ваши качества"
             />
-            <button
-                className="btn btn-primary w-100 mx-auto"
-                onClick={handleClickPage}
-                type="submit"
-            >
+            <button className="btn btn-primary w-100 mx-auto" type="submit">
                 Submit
             </button>
         </form>

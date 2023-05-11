@@ -117,7 +117,7 @@ const RegisterForm = () => {
         const isValid = validate();
         if (!isValid) return;
         const { profession, qualities } = data;
-        console.log({
+        console.log("reg data", {
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)

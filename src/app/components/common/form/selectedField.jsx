@@ -57,7 +57,7 @@ const SelectedField = ({
 };
 SelectedField.propTypes = {
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     name: PropTypes.string,
     onChange: PropTypes.func,
     defaultOption: PropTypes.string,
