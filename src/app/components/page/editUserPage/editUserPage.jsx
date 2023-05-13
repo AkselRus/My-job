@@ -30,10 +30,30 @@ const EditUserPage = () => {
             setQualities(qualitiesList);
         });
     }, []);
+    const newProf = {
+        ...user,
+        profession: {
+            value: user?.profession?._id,
+            label: user?.profession?.name
+        }
+    };
+    const newQual = user?.qualities.map((el) => ({
+        value: el._id,
+        label: el.name,
+        color: el.color
+    }));
+    // setUser(() => );
+    console.log("newProf", newProf);
+    console.log("newQual", newQual);
+
+    // user?.profession.map((el) => ({
+    //     value: el._id,
+    //     label: el.name
+    // }));
     const getProfessionById = (id) => {
         for (const prof of professions) {
             if (prof.value === id) {
-                return { _id: prof.value, name: prof.label };
+                return { _id: prof?.value, name: prof?.label };
             }
         }
     };
@@ -43,9 +63,9 @@ const EditUserPage = () => {
             for (const quality in qualities) {
                 if (elem.value === qualities[quality].value) {
                     qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: qualities[quality].color
+                        _id: qualities[quality]?.value,
+                        name: qualities[quality]?.label,
+                        color: qualities[quality]?.color
                     });
                 }
             }
@@ -70,11 +90,6 @@ const EditUserPage = () => {
             profession: getProfessionById(user.profession),
             qualities: getQualities(user.qualities)
         };
-        console.log("reg data", {
-            ...user,
-            profession: getProfessionById(user.profession),
-            qualities: getQualities(user.qualities)
-        });
         api.users.update(userId, newData);
         console.log(history);
         history.push(`/users/${userId}`);
@@ -97,10 +112,11 @@ const EditUserPage = () => {
             />
             <SelectedField
                 label="Выбери свою профессию"
-                defaultOption="Choose..."
+                defaultOption="Choise..."
                 options={professions}
                 name="profession"
                 onChange={handleChange}
+                defaultValue={user.profession}
                 value={user.profession}
                 // error={errors.profession}
             />
@@ -118,7 +134,7 @@ const EditUserPage = () => {
             <MultiSelectField
                 options={qualities}
                 onChange={handleChange}
-                defaultValue={user.qualities}
+                defaultValue={newQual}
                 name="qualities"
                 label="Выберите ваши качества"
             />
