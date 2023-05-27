@@ -60,7 +60,7 @@ SelectedField.propTypes = {
     value: PropTypes.PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     name: PropTypes.string,
     onChange: PropTypes.func,
-    defaultOption: PropTypes.object,
+    defaultOption: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     error: PropTypes.string
 };
