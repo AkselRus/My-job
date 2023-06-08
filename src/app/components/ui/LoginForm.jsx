@@ -1,8 +1,7 @@
-/* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-import TextFiled from "../common/form/textFiled";
-import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
+import TextField from "../common/form/textField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -19,15 +18,21 @@ const LoginForm = () => {
     };
     const validatorConfig = {
         email: {
-            isRequired: { message: "Введите логин" },
-            isEmail: { message: "Логин введен не корректно" }
+            isRequired: {
+                message: "Электронная почта обязательна для заполнения"
+            },
+            isEmail: {
+                message: "Email введен некорректно"
+            }
         },
         password: {
-            isRequired: { message: "Введите пароль" },
-            isPassword: {
+            isRequired: {
+                message: "Пароль обязателен для заполнения"
+            },
+            isCapitalSymbol: {
                 message: "Пароль должен содержать хотя бы одну заглавную букву"
             },
-            isPasswordDigital: {
+            isContainDigit: {
                 message: "Пароль должен содержать хотя бы одно число"
             },
             min: {
@@ -45,22 +50,23 @@ const LoginForm = () => {
         return Object.keys(errors).length === 0;
     };
     const isValid = Object.keys(errors).length === 0;
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log("data", data);
+        console.log(data);
     };
     return (
         <form onSubmit={handleSubmit}>
-            <TextFiled
-                label="Логин"
+            <TextField
+                label="Электронная почта"
                 name="email"
                 value={data.email}
                 onChange={handleChange}
                 error={errors.email}
             />
-            <TextFiled
+            <TextField
                 label="Пароль"
                 type="password"
                 name="password"
@@ -69,9 +75,9 @@ const LoginForm = () => {
                 error={errors.password}
             />
             <CheckBoxField
-                name={"stayOn"}
                 value={data.stayOn}
                 onChange={handleChange}
+                name="stayOn"
             >
                 Оставаться в системе
             </CheckBoxField>
@@ -80,9 +86,10 @@ const LoginForm = () => {
                 type="submit"
                 disabled={!isValid}
             >
-                Отправить
+                Submit
             </button>
         </form>
     );
 };
+
 export default LoginForm;

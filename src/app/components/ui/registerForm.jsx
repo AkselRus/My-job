@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
-import TextFiled from "../common/form/textFiled";
+import TextField from "../common/form/textField";
 import api from "../../api";
+import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
-import SelectedField from "../common/form/selectedField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -117,7 +117,7 @@ const RegisterForm = () => {
         const isValid = validate();
         if (!isValid) return;
         const { profession, qualities } = data;
-        console.log("reg data", {
+        console.log({
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
@@ -125,14 +125,14 @@ const RegisterForm = () => {
     };
     return (
         <form onSubmit={handleSubmit}>
-            <TextFiled
+            <TextField
                 label="Электронная почта"
                 name="email"
                 value={data.email}
                 onChange={handleChange}
                 error={errors.email}
             />
-            <TextFiled
+            <TextField
                 label="Пароль"
                 type="password"
                 name="password"
@@ -140,7 +140,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
-            <SelectedField
+            <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Choose..."
                 options={professions}
