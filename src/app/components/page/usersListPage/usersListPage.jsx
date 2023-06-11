@@ -9,7 +9,7 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
 const UsersListPage = () => {
-    const { users } = useUser();
+    const { users, deleteUser } = useUser();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +18,7 @@ const UsersListPage = () => {
     const pageSize = 8;
 
     const handleDelete = (userId) => {
+        deleteUser(userId);
         // setUsers(users.filter((user) => user._id !== userId));
         console.log(userId);
     };
