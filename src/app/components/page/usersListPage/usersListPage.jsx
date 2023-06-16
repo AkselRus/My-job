@@ -9,7 +9,7 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
 const UsersListPage = () => {
-    const { users, deleteUser } = useUser();
+    const { users, deleteUser, setUsers } = useUser();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [searchQuery, setSearchQuery] = useState("");
@@ -23,13 +23,14 @@ const UsersListPage = () => {
         console.log(userId);
     };
     const handleToggleBookMark = (id) => {
+        console.log("handleToggleBookMark");
         const newArray = users.map((user) => {
             if (user._id === id) {
                 return { ...user, bookmark: !user.bookmark };
             }
             return user;
         });
-        // setUsers(newArray);
+        setUsers(newArray);
         console.log(newArray);
     };
 
