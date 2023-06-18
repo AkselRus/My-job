@@ -20,7 +20,6 @@ const UsersListPage = () => {
     const handleDelete = (userId) => {
         deleteUser(userId);
         // setUsers(users.filter((user) => user._id !== userId));
-        console.log(userId);
     };
     const handleToggleBookMark = (id) => {
         console.log("handleToggleBookMark");
@@ -31,7 +30,6 @@ const UsersListPage = () => {
             return user;
         });
         setUsers(newArray);
-        console.log(newArray);
     };
 
     useEffect(() => {

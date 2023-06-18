@@ -2,8 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useQualitie } from "../../../hooks/useQualitie";
 const Quality = ({ id }) => {
-    console.log("id", id);
-    console.log("id typeof", typeof id);
     if (typeof id === "string") {
         const { getQuality } = useQualitie();
         const { color, name } = getQuality(id);

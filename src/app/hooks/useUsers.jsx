@@ -35,7 +35,6 @@ const UserProvider = ({ children }) => {
         setUsers(users.filter((user) => user._id !== id));
     }
     function errorCatcher(error) {
-        console.log(error);
         const { message } = error;
         setError(message);
         setLoading(false);

@@ -21,7 +21,6 @@ const LoginForm = () => {
             [target.name]: target.value
         }));
     };
-    console.log(process.env);
     async function signIn({ email, password }) {
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
         console.log("url", url);
