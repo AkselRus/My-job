@@ -1,57 +1,62 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import qualityService from "../services/qualityService";
+import PropTypes from "prop-types";
+import qualityService from "../services/quality.service";
 
-const QualityContext = React.createContext();
+const QualitiesContext = React.createContext();
 
 export const useQualitie = () => {
-    return useContext(QualityContext);
+    return useContext(QualitiesContext);
 };
 
-const QualityProvider = ({ children }) => {
-    const [qualities, setQuality] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+export const QualitiesProvider = ({ children }) => {
+    const [qualities, setQualities] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoading, setLoading] = useState(true);
+
     useEffect(() => {
-        getQualityList();
+        const getQualities = async () => {
+            try {
+                const { content } = await qualityService.fetchAll();
+                setQualities(content);
+                setLoading(false);
+            } catch (error) {
+                errorCatcher(error);
+            }
+        };
+        getQualities();
     }, []);
+    const getQuality = (id) => {
+        return qualities.find((q) => q._id === id);
+    };
+
+    function errorCatcher(error) {
+        const { message } = error.response.data;
+        setError(message);
+    }
     useEffect(() => {
         if (error !== null) {
             toast(error);
             setError(null);
         }
     }, [error]);
-    function getQuality(id) {
-        return qualities?.find((p) => p._id === id);
-    }
 
-    async function getQualityList() {
-        try {
-            const { content } = await qualityService.get();
-            setQuality(content);
-            setLoading(false);
-        } catch (error) {
-            errorCatcher(error);
-        }
-    }
-    function errorCatcher(error) {
-        const { message } = error.response.data;
-        setError(message);
-        setLoading(false);
-    }
     return (
-        <QualityContext.Provider value={{ isLoading, getQuality, qualities }}>
+        <QualitiesContext.Provider
+            value={{
+                qualities,
+                getQuality,
+                isLoading
+            }}
+        >
             {children}
-        </QualityContext.Provider>
+        </QualitiesContext.Provider>
     );
 };
 
-QualityProvider.propTypes = {
+QualitiesProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ])
 };
-
-export default QualityProvider;
