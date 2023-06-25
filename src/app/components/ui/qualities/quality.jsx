@@ -8,7 +8,7 @@ const Quality = ({ id }) => {
         return <span className={"badge m-1 bg-" + color}>{name}</span>;
     }
 
-    return <span className={"badge m-1 bg-" + id.color}>{id.name}</span>;
+    return <span className={"badge m-1 bg-" + id?.color}>{id?.name}</span>;
 };
 Quality.propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.object])

@@ -7,6 +7,7 @@ import localStorageService, {
     setTokens
 } from "../services/localStorage.service";
 import { useHistory } from "react-router-dom";
+import httpService from "../services/http.service";
 
 export const httpAuth = axios.create({
     baseURL: "https://identitytoolkit.googleapis.com/v1/",
@@ -29,7 +30,7 @@ const AuthProvider = ({ children }) => {
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
-    console.log(currentUser?.name);
+    console.log("httpAuth", httpService);
     async function signIn({ email, password }) {
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
         try {
@@ -123,6 +124,17 @@ const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     }
+    async function userUpdate(data) {
+        console.log(data, "useAuth update");
+        try {
+            const { content } = await userService.update(data);
+            console.log("content", content);
+        } catch (error) {
+            errorCatcher(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         if (localStorageService.getAccessToken()) {
             getUserData();
@@ -137,11 +149,14 @@ const AuthProvider = ({ children }) => {
         }
     }, [error]);
     function errorCatcher(error) {
+        console.log(error);
         const { message } = error.response.data;
         setError(message);
     }
     return (
-        <AuthContext.Provider value={{ signUp, currentUser, signIn, logOut }}>
+        <AuthContext.Provider
+            value={{ signUp, currentUser, signIn, logOut, userUpdate }}
+        >
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );

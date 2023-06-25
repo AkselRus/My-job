@@ -11,6 +11,7 @@ export const useQualitie = () => {
 
 export const QualitiesProvider = ({ children }) => {
     const [qualities, setQualities] = useState([]);
+    console.log("useQualitie", qualities);
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
 
@@ -31,8 +32,10 @@ export const QualitiesProvider = ({ children }) => {
     };
 
     function errorCatcher(error) {
-        const { message } = error.response.data;
-        setError(message);
+        if (error.response) {
+            const { message } = error.response.data;
+            setError(message);
+        }
     }
     useEffect(() => {
         if (error !== null) {
@@ -46,6 +49,7 @@ export const QualitiesProvider = ({ children }) => {
             value={{
                 qualities,
                 getQuality,
+                setQualities,
                 isLoading
             }}
         >

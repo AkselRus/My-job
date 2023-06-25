@@ -8,9 +8,11 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
+
 const UsersListPage = () => {
     const { users, deleteUser, setUsers } = useUser();
     const { professions } = useProfessions();
+    console.log(professions);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();

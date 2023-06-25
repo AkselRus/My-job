@@ -18,7 +18,7 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookMark }) => {
         },
         qualities: {
             name: "Качества",
-            component: (user) => <Qualities qualities={user.qualities} />
+            component: (user) => <Qualities qualities={user?.qualities} />
         },
         professions: {
             name: "Профессия",

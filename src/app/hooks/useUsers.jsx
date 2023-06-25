@@ -31,6 +31,7 @@ const UserProvider = ({ children }) => {
             errorCatcher(error);
         }
     }
+
     function deleteUser(id) {
         setUsers(users.filter((user) => user._id !== id));
     }
@@ -44,7 +45,12 @@ const UserProvider = ({ children }) => {
     }
     return (
         <UserContext.Provider
-            value={{ users, deleteUser, setUsers, getUserById }}
+            value={{
+                users,
+                deleteUser,
+                setUsers,
+                getUserById
+            }}
         >
             {!isLoading ? children : "Loading..."}
         </UserContext.Provider>
