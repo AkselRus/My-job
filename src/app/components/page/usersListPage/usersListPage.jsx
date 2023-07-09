@@ -13,7 +13,6 @@ import { getProfessions } from "../../../store/professions";
 const UsersListPage = () => {
     const { users, deleteUser, setUsers } = useUser();
     const professions = useSelector(getProfessions());
-    console.log(professions);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();

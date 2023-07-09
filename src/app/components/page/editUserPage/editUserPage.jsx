@@ -6,10 +6,9 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useQualitie } from "../../../hooks/useQualitie";
 import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
-import { getQualities } from "../../../store/qualities";
+import { getQualities, getQualitiesById } from "../../../store/qualities";
 import { getProfessions } from "../../../store/professions";
 
 const EditUserPage = () => {
@@ -17,13 +16,10 @@ const EditUserPage = () => {
     const { userUpdate, currentUser } = useAuth();
 
     const qualities = useSelector(getQualities());
+    const qualUser = useSelector(getQualitiesById(currentUser.qualities));
     // const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
 
     const [isLoading, setIsLoading] = useState(false);
-
-    const { getQuality } = useQualitie();
-    const qualUser = currentUser?.qualities.map((q) => getQuality(q));
-    console.log("qualUser", qualUser);
 
     const newUserQualiti = qualUser?.map((q) => ({
         label: q?.name,
@@ -38,13 +34,11 @@ const EditUserPage = () => {
     }));
 
     const professions = useSelector(getProfessions());
-    console.log("professions", professions);
     const professionsList = professions.map((q) => ({
         label: q.name,
         value: q._id
     }));
     const [data, setData] = useState({ ...currentUser });
-    console.log("Data", data);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (e) => {
@@ -56,7 +50,6 @@ const EditUserPage = () => {
             ...data,
             qualities: data.qualities.map((q) => q.value)
         };
-        console.log(newData);
         try {
             userUpdate(newData);
             history.push(`/users/${data._id}`);
