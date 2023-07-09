@@ -7,17 +7,24 @@ import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
 import { useQualitie } from "../../../hooks/useQualitie";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../../store/qualities";
+import { getProfessions } from "../../../store/professions";
 
 const EditUserPage = () => {
     const history = useHistory();
     const { userUpdate, currentUser } = useAuth();
 
+    const qualities = useSelector(getQualities());
+    // const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+
     const [isLoading, setIsLoading] = useState(false);
 
-    const { qualities, getQuality } = useQualitie();
+    const { getQuality } = useQualitie();
     const qualUser = currentUser?.qualities.map((q) => getQuality(q));
+    console.log("qualUser", qualUser);
+
     const newUserQualiti = qualUser?.map((q) => ({
         label: q?.name,
         value: q?._id,
@@ -30,7 +37,8 @@ const EditUserPage = () => {
         color: q?.color
     }));
 
-    const { professions } = useProfessions();
+    const professions = useSelector(getProfessions());
+    console.log("professions", professions);
     const professionsList = professions.map((q) => ({
         label: q.name,
         value: q._id
@@ -38,28 +46,7 @@ const EditUserPage = () => {
     const [data, setData] = useState({ ...currentUser });
     console.log("Data", data);
     const [errors, setErrors] = useState({});
-    // const getProfessionById = (id) => {
-    //     for (const prof of professions) {
-    //         if (prof.value === id) {
-    //             return { _id: prof.value, name: prof.label };
-    //         }
-    //     }
-    // };
-    // const getQualities = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in qualities) {
-    //             if (elem.value === qualities[quality].value) {
-    //                 qualitiesArray.push({
-    //                     _id: qualities[quality].value,
-    //                     name: qualities[quality].label,
-    //                     color: qualities[quality].color
-    //                 });
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();

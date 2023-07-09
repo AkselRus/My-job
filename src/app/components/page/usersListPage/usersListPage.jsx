@@ -7,11 +7,12 @@ import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getProfessions } from "../../../store/professions";
 
 const UsersListPage = () => {
     const { users, deleteUser, setUsers } = useUser();
-    const { professions } = useProfessions();
+    const professions = useSelector(getProfessions());
     console.log(professions);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");

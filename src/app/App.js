@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Users from "./layouts/users";
@@ -10,8 +10,16 @@ import AuthProvider from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
 import { QualitiesProvider } from "./hooks/useQualitie";
+import { useDispatch } from "react-redux";
+import { loadQualitiesList } from "./store/qualities";
+import { loadProfessionsList } from "./store/professions";
 
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loadQualitiesList());
+        dispatch(loadProfessionsList());
+    }, []);
     return (
         <div>
             <AuthProvider>
