@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import qualititiesReducer from "./qualities";
 import professionsReducer from "./professions";
+import usersReducer from "./users";
 
 const rootReducer = combineReducers({
     qualities: qualititiesReducer,
-    professions: professionsReducer
+    professions: professionsReducer,
+    users: usersReducer
 });
 
 export function createSrore() {

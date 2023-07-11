@@ -81,7 +81,6 @@ const AuthProvider = ({ children }) => {
                 rate: randomInt(0, 200),
                 ...rest
             });
-            console.log(data);
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
@@ -105,8 +104,6 @@ const AuthProvider = ({ children }) => {
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
-            console.log(content);
-            console.log(currentUser);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
@@ -123,7 +120,6 @@ const AuthProvider = ({ children }) => {
         }
     }
     async function userUpdate(data) {
-        console.log(data, "useAuth update");
         try {
             const { content } = await userService.update(data);
             console.log("content", content);

@@ -1,22 +1,21 @@
 import React from "react";
-import { useAuth } from "../../hooks/useAuth";
+import { Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Redirect, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getIsLoggedIn } from "../../store/users";
+function ProtectedRoute({ component: Component, children, ...rest }) {
+    const isLoggedIn = useSelector(getIsLoggedIn());
 
-// eslint-disable-next-line react/prop-types
-const ProtectedRoute = ({ component: Component, children, ...rest }) => {
-    const { currentUser } = useAuth();
     return (
         <Route
             {...rest}
             render={(props) => {
-                if (!currentUser) {
+                if (!isLoggedIn) {
                     return (
                         <Redirect
                             to={{
                                 pathname: "/login",
                                 state: {
-                                    // eslint-disable-next-line react/prop-types
                                     from: props.location
                                 }
                             }}
@@ -27,8 +26,8 @@ const ProtectedRoute = ({ component: Component, children, ...rest }) => {
             }}
         />
     );
-};
-ProtectedRoute.propType = {
+}
+ProtectedRoute.propTypes = {
     component: PropTypes.func,
     location: PropTypes.object,
     children: PropTypes.oneOfType([
@@ -36,4 +35,5 @@ ProtectedRoute.propType = {
         PropTypes.node
     ])
 };
+
 export default ProtectedRoute;

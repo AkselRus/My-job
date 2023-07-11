@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesById } from "../../../store/qualities";
 import { getProfessions } from "../../../store/professions";
+import { getCurrentUserData, updateUser } from "../../../store/users";
 
 const EditUserPage = () => {
-    const history = useHistory();
-    const { userUpdate, currentUser } = useAuth();
-
+    const dispatch = useDispatch();
+    const currentUser = useSelector(getCurrentUserData());
     const qualities = useSelector(getQualities());
     const qualUser = useSelector(getQualitiesById(currentUser.qualities));
     // const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
@@ -45,18 +43,11 @@ const EditUserPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log("deleteUserFirebasa");
         const newData = {
             ...data,
             qualities: data.qualities.map((q) => q.value)
         };
-        try {
-            userUpdate(newData);
-            history.push(`/users/${data._id}`);
-        } catch (error) {
-            setErrors(error);
-        }
-        // history.push(`/users/${data._id}`);
+        dispatch(updateUser(newData));
     };
     useEffect(() => {
         setData({
