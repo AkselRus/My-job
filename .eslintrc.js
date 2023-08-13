@@ -3,7 +3,8 @@ module.exports = {
         browser: true,
         es2021: true
     },
-    extends: ["plugin:react/recommended", "standard"],
+    // extends: ["eslint:recommended", "plugin:react/recommended"],
+    extends: ["plugin:react/recommended", "standard", "eslint:recommended"],
     parserOptions: {
         ecmaFeatures: {
             jsx: true
@@ -14,6 +15,7 @@ module.exports = {
     plugins: ["react"],
     rules: {
         semi: [2, "always"],
+        "react/display-name": "off",
         indent: [0, 4],
         "space-before-function-paren": [
             "error",
@@ -27,6 +29,7 @@ module.exports = {
                 allowTemplateLiterals: true,
                 avoidEscape: true
             }
-        ]
+        ],
+        "react/react-in-jsx-scope": "off"
     }
 };

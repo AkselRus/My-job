@@ -4,10 +4,10 @@ import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthErrors, logIn } from "../../store/users";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [data, setData] = useState({
@@ -63,10 +63,11 @@ const LoginForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(history);
-        const redirect = history.location.state
-            ? history.location.state.from.pathname
-            : "/";
+        console.log(navigate);
+        // const redirect = history.location.state
+        //     ? history.location.state.from.pathname
+        //     : "/";
+        const redirect = navigate("");
         dispatch(logIn({ payload: data, redirect }));
     };
     return (

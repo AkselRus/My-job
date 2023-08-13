@@ -9,18 +9,21 @@ import {
 } from "../../../store/qualities";
 
 const QualitiesList = ({ qualities }) => {
+    console.log(qualities);
     const dispatch = useDispatch();
     const isLoading = useSelector(getQualitiesLoadingStatus());
     const qualitiesList = useSelector(getQualitiesById(qualities));
+    console.log(qualitiesList);
     useEffect(() => {
         dispatch(loadQualitiesList());
     }, []);
     if (isLoading) return "Loading";
     return (
         <>
-            {qualitiesList.map((qual) => (
-                <Quality key={qual._id} {...qual} />
-            ))}
+            {qualitiesList &&
+                qualitiesList.map((qual) => (
+                    <Quality key={qual._id} {...qual} />
+                ))}
         </>
     );
 };

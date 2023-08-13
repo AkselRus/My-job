@@ -5,6 +5,7 @@ import { getCurrentUserData, getCurrentUserId } from "../../store/users";
 
 const NavProfile = () => {
     const currentUserId = useSelector(getCurrentUserId());
+    console.log(currentUserId);
     const currentUser = useSelector(getCurrentUserData());
     const [isOpen, setOpen] = useState(false);
     const toggleMenu = () => {
@@ -28,7 +29,7 @@ const NavProfile = () => {
                 />
             </div>
             <div className={"w-100 dropdown-menu" + (isOpen ? " show" : "")}>
-                <Link to={`/users/${currentUserId}`} className="dropdown-item">
+                <Link to={currentUserId} className="dropdown-item">
                     Profile
                 </Link>
                 <Link to="logout" className="dropdown-item">

@@ -177,8 +177,11 @@ export const deleteUser = (userId) => (state) => {
     }
 };
 export const getUsersList = () => (state) => state.users.entities;
-export const getCurrentUserData = () => (state) =>
-    state.users.entities.find((u) => u._id === state.users.auth.userId);
+export const getCurrentUserData = () => (state) => {
+    if (state) {
+        state.users.entities.find((u) => u._id === state.users.auth.userId);
+    }
+};
 export const getUserById = (userId) => (state) => {
     if (state.users.entities) {
         return state.users.entities.find((u) => u._id === userId);

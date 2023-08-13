@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Navigate, Outlet } from "react-router-dom";
 import EditUserPage from "../components/page/editUserPage";
 import UserPage from "../components/page/userPage";
 import UsersListPage from "../components/page/usersListPage";
@@ -14,12 +14,13 @@ const Users = () => {
     return (
         <>
             <UsersLoader>
+                <Outlet />
                 {userId ? (
                     edit ? (
                         userId === currentUserId ? (
                             <EditUserPage />
                         ) : (
-                            <Redirect to={`/users/${currentUserId}/edit`} />
+                            <Navigate to={`edit`} />
                         )
                     ) : (
                         <UserPage userId={userId} />
