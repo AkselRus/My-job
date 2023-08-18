@@ -1,4 +1,7 @@
 {
     "port": 8080,
-    "mongoUrl": ""
+    "mongoUri": "mongodb+srv://admin:7Bq4UpXe29jXHP2@cluster0.44nhvcu.mongodb.net/?retryWrites=true&w=majority",
+    "accessSecret": "secretKey for accessToken",
+    "refreshSecret": "secretKey for refreshToken"
+
 }
